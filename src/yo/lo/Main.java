@@ -9,5 +9,6 @@ public class Main {
         System.out.println("Hello Guys");
         System.out.println("Hello Guys");
 
+        double test = 2.4;
     }
 }
