@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="almostTorrent:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/almostTorrent_jar</output-path>
+    <root id="archive" name="almostTorrent.jar">
+      <element id="module-output" name="almostTorrent" />
+    </root>
+  </artifact>
+</component>
