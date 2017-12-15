@@ -1,7 +1,6 @@
 package almostTorrent.peer;
 
 import almostTorrent.utils.docUtils;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,42 +14,44 @@ import java.util.concurrent.Executors;
 import static almostTorrent.utils.docUtils.printHelp;
 import static almostTorrent.utils.ioUtils.ep;
 import static almostTorrent.utils.ioUtils.mKbScanner;
-import static almostTorrent.utils.otherUtils.exitSoftware;
 
 public class peerMain {
 
+    private static boolean peerThreadRunning = false;
+
     static String lastMessage = "";
-    static List<Socket> mSocketList = new ArrayList<Socket>();
+    private static List<Socket> mSocketList = new ArrayList<>();
 
     public static void main(String[] args) {
-        ep("Starting peer client");
+        if (!peerThreadRunning) {
+            ep("Starting peer client");
 
-        Runnable r = () -> {
-            ExecutorService mExecutorService = Executors.newCachedThreadPool();
+            Thread peerThreadManagerThread = new Thread(peerThreadManagerRunnable);
+            peerThreadManagerThread.start();
 
-            try {
-                ServerSocket mServerSocket = new ServerSocket(50000);
-
-
-                while (true) {
-                    Socket socket = mServerSocket.accept();
-                    mSocketList.add(socket);
-                    peerThread thread = new peerThread(socket);
-                    mExecutorService.execute(thread);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                ep("Port already in use, bailing");
-            }
-        };
-
-        Thread t = new Thread(r);
-        t.start();
-        System.out.println("Peer client started\n");
-
-
+        } else {
+            ep("Peer client already running");
+        }
     }
+
+    private static Runnable peerThreadManagerRunnable = () -> {
+        ExecutorService mExecutorService = Executors.newCachedThreadPool();
+
+        try {
+            ServerSocket mServerSocket = new ServerSocket(50000);
+
+            while (peerThreadRunning) {
+                Socket socket = mServerSocket.accept();
+                mSocketList.add(socket);
+                peerThread thread = new peerThread(socket);
+                mExecutorService.execute(thread);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            ep("Port already in use, bailing");
+        }
+    };
 
     public static void broadcast(){
         for(Socket socket : mSocketList){
