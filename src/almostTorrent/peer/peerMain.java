@@ -11,6 +11,8 @@ public class peerMain {
 
     public static void main(String[] args) {
         ep("Starting peer client");
+
+        //TODO: implement actual peer
     }
 
     public static void shell(){

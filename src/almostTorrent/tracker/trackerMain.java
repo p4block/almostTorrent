@@ -4,12 +4,13 @@ import almostTorrent.utils.docUtils;
 
 import static almostTorrent.utils.docUtils.printHelp;
 import static almostTorrent.utils.ioUtils.mKbScanner;
-import static almostTorrent.utils.otherUtils.exitSoftware;
 
 public class trackerMain {
 
     public static void main(String[] args) {
-        System.out.println("Server running");
+        System.out.println("Tracker running");
+
+        //TODO: implement actual tracker
     }
 
     public static void shell(){
