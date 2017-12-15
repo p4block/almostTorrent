@@ -17,6 +17,13 @@ public class docUtils {
                 ep("shell (peer || tracker)");
                 ep("exit");
                 ep("help");
+                break;
+            case "start":
+                ep("Invalid syntax's. Use 'start (peer || tracker)'");
+                break;
+            case "shell":
+                ep("Invalid syntax's. Use 'shell (peer || tracker)'");
+                break;
 
 //                ep("--> tracker set <IP>:<Port>");
 //                ep("--> tracker get");
@@ -25,7 +32,7 @@ public class docUtils {
 //                ep("--> show peers");
 //                ep("--> mode set <Mode>");
 //                ep("--> mode get");
-                break;
+//                break;
         }
     }
 }

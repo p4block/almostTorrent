@@ -4,6 +4,7 @@ import almostTorrent.peer.peerMain;
 import almostTorrent.tracker.trackerMain;
 
 import almostTorrent.utils.*;
+
 import static almostTorrent.utils.ioUtils.*;
 import static almostTorrent.utils.otherUtils.*;
 import static almostTorrent.utils.docUtils.*;
@@ -18,7 +19,7 @@ public class starter {
         initializeStarter();
     }
 
-    private static void initializeStarter(){
+    private static void initializeStarter() {
         // Start all
         ioUtils.initializeHelpers();
 
@@ -53,11 +54,17 @@ public class starter {
             System.out.print("\n% ");
 
             switch (mKbScanner.nextLine().toLowerCase()) {
+                case "start":
+                    docUtils.printHelp("start");
+                    break;
                 case "start peer":
                     startPeer();
                     break;
                 case "start tracker":
                     startTracker();
+                    break;
+                case "shell":
+                    docUtils.printHelp("shell");
                     break;
                 case "shell peer":
                     shellPeer();
@@ -82,19 +89,19 @@ public class starter {
 
     }
 
-    private static void startPeer(){
+    private static void startPeer() {
         peerMain.main(mArgs);
     }
 
-    private static void startTracker(){
+    private static void startTracker() {
         trackerMain.main(mArgs);
     }
 
-    private static void shellPeer(){
+    private static void shellPeer() {
         peerMain.shell();
     }
 
-    private static void shellTracker(){
+    private static void shellTracker() {
         trackerMain.shell();
     }
 }
