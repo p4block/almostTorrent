@@ -3,10 +3,9 @@ package almostTorrent;
 import almostTorrent.peer.peerMain;
 import almostTorrent.tracker.trackerMain;
 
-import almostTorrent.utils.ioUtils;
+import almostTorrent.utils.*;
 import static almostTorrent.utils.ioUtils.*;
-
-import almostTorrent.utils.docUtils;
+import static almostTorrent.utils.otherUtils.*;
 import static almostTorrent.utils.docUtils.*;
 
 public class starter {
@@ -61,7 +60,8 @@ public class starter {
                     startTracker();
                     break;
                 case "exit":
-                    System.exit(0);
+                    exitSoftware(0);
+                    break;
                 case "help":
                     docUtils.printHelp("masterShell");
                     break;
