@@ -1,20 +1,17 @@
-package almostTorrent.peer;
-
-import almostTorrent.communication.messagePacket;
-import almostTorrent.tracker.trackerMain;
+package almostTorrent.tracker;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-import static almostTorrent.utils.ioUtils.ep;
+import almostTorrent.communication.messagePacket;
+import static almostTorrent.utils.ioUtils.*;
 
-public class peerThread implements Runnable {
+public class trackerThread implements Runnable {
 
     private Socket mSocket = null;
     private long id = 0;
 
-    public Socket getmSocket() {
+    public Socket getSocket() {
         return mSocket;
     }
 
@@ -30,7 +27,7 @@ public class peerThread implements Runnable {
         this.id = id;
     }
 
-    peerThread(Socket socket) {
+    trackerThread(Socket socket) {
         this.mSocket = socket;
         this.id = System.currentTimeMillis();
 
@@ -38,15 +35,18 @@ public class peerThread implements Runnable {
 
     public void run() {
         try {
-            ep("Peer thread " + id + ": handling connection on port " + String.valueOf(mSocket.getPort()));
+            ep("Tracker thread " + id + ": handling connection on port " + String.valueOf(mSocket.getPort()));
 
-            //ObjectOutputStream mObjectOutputStream = new ObjectOutputStream(mSocket.getOutputStream());
             ObjectInputStream mObjectInputStream = new ObjectInputStream(mSocket.getInputStream());
+           // ObjectOutputStream mObjectOutputStream = null;
 
             try {
-                ep("Receiving object");
+                ep("Tracker receiving incoming connection");
                 messagePacket mReceivedPacket = (messagePacket) mObjectInputStream.readObject();
-                ep(mReceivedPacket.toString());
+                ep(mReceivedPacket.messageContent);
+                ObjectOutputStream mObjectOutputStream = new ObjectOutputStream(mSocket.getOutputStream());
+                mObjectOutputStream.writeObject(new messagePacket(mReceivedPacket.messageContent));
+
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {

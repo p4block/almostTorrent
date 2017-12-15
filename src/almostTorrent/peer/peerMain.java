@@ -1,5 +1,6 @@
 package almostTorrent.peer;
 
+import almostTorrent.communication.communicationThread;
 import almostTorrent.utils.docUtils;
 
 import java.io.IOException;
@@ -19,26 +20,28 @@ public class peerMain {
 
     private static boolean peerThreadRunning = false;
 
-    static String lastMessage = "";
     private static List<Socket> mSocketList = new ArrayList<>();
+
+    private static ExecutorService mExecutorService;
 
     public static void main(String[] args) {
         if (!peerThreadRunning) {
-            ep("Starting peer client");
+            ep("Starting peer daemon...");
 
-            Thread peerThreadManagerThread = new Thread(peerThreadManagerRunnable);
-            peerThreadManagerThread.start();
+            // Initialize thread manager
+            mExecutorService = Executors.newCachedThreadPool();
 
+            // Start server socket listener
+            mExecutorService.execute(peerThreadManagerRunnable);
         } else {
-            ep("Peer client already running");
+            ep("Peer daemon already running");
         }
     }
 
     private static Runnable peerThreadManagerRunnable = () -> {
-        ExecutorService mExecutorService = Executors.newCachedThreadPool();
-
         try {
-            ServerSocket mServerSocket = new ServerSocket(50000);
+            ServerSocket mServerSocket = new ServerSocket(50001);
+            peerThreadRunning = true;
 
             while (peerThreadRunning) {
                 Socket socket = mServerSocket.accept();
@@ -53,30 +56,37 @@ public class peerMain {
         }
     };
 
-    public static void broadcast(){
-        for(Socket socket : mSocketList){
-            try {
-                new PrintWriter(socket.getOutputStream(), true).println(lastMessage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
+    // Overridely send message to tracker
+    public static void sendMessage(String message){
+        communicationThread mCommunicationThread = new communicationThread("Hello GUYS!");
+        mExecutorService.execute(mCommunicationThread);
     }
 
     public static void cleanSocket(Socket socket){
-        System.out.println("Garbage useless socket closed!");
+        System.out.println("Socket closed");
         mSocketList.remove(socket);
 
     }
 
+    private static void pingServer(String[] params) {
+        String pingMessage = "Ping!";
+        if (params.length > 1) {
+            pingMessage = params[1];
+        }
+
+        sendMessage(pingMessage);
+    }
 
     // CLI Shell function
     public static void shell(){
         boolean shellActive = true;
         while (shellActive) {
             System.out.print("\npeer% ");
-            switch (mKbScanner.nextLine().toLowerCase()) {
+            String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
+            switch (params[0]) {
+                case "ping":
+                    pingServer(params);
+                    break;
                 case "exit":
                     shellActive = false;
                     break;
