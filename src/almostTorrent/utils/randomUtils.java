@@ -5,15 +5,15 @@ import java.util.Scanner;
 public class randomUtils {
 
     // Help helper
-    public static void printHelp(String topic) {
-        switch (topic) {
+    public static void printHelp(String input){
+        switch(input){
             case "jar":
-                ep("java -jar randomUtils.jar -s/-c/-i");
-                ep("-s server \n-c for client \n-i for interactive shell");
+                ep("java -jar randomUtils.jar -t || -p || -i");
+                ep("-t tracker mode \n-p peer mode \n-i interactive shell");
                 break;
             case "masterShell":
                 ep("Available commands:");
-                ep("start (client || server)");
+                ep("start (peer || tracker)");
                 ep("exit");
                 ep("help");
 
@@ -30,17 +30,16 @@ public class randomUtils {
 
     // Keyboard helper
     public static Scanner mKbScanner;
-
-    public static void initializeHelpers() {
+    public static void initializeHelpers(){
         mKbScanner = new Scanner(System.in);
     }
 
     // Print helpers
-    public static void ep(String s) {
+    public static void ep(String s){
         System.out.println(s);
     }
 
-    public static void ep(int i) {
+    public static void ep(int i){
         System.out.println(String.valueOf(i));
     }
 

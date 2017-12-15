@@ -1,7 +1,7 @@
 package almostTorrent;
 
-import almostTorrent.client.clientMain;
-import almostTorrent.server.serverMain;
+import almostTorrent.peer.peerMain;
+import almostTorrent.tracker.trackerMain;
 import almostTorrent.utils.randomUtils;
 
 import static almostTorrent.utils.randomUtils.*;
@@ -24,20 +24,23 @@ public class starter {
 
         for (String i : mArgs) {
             switch (i) {
-                case "-c":
-                    startClient();
+                case "-p":
+                    startPeer();
                     break;
-                case "-s":
-                    startServer();
+                case "-t":
+                    startTracker();
                     break;
                 case "-i":
                     startCliLoop();
                     break;
                 default:
                     randomUtils.printHelp("jar");
-                    break;
             }
         }
+
+        // We only reach this if bad options were given
+        randomUtils.printHelp("jar");
+
     }
 
     private static void startCliLoop() {
@@ -48,11 +51,11 @@ public class starter {
             System.out.print("\n % ");
 
             switch (mKbScanner.nextLine().toLowerCase()) {
-                case "start client":
-                    startClient();
+                case "start peer":
+                    startPeer();
                     break;
-                case "start server":
-                    startServer();
+                case "start tracker":
+                    startTracker();
                     break;
                 case "exit":
                     System.exit(0);
@@ -70,11 +73,11 @@ public class starter {
 
     }
 
-    private static void startClient(){
-        clientMain.main(mArgs);
+    private static void startPeer(){
+        peerMain.main(mArgs);
     }
 
-    private static void startServer(){
-        serverMain.main(mArgs);
+    private static void startTracker(){
+        trackerMain.main(mArgs);
     }
 }

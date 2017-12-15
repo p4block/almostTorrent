@@ -1,8 +1,6 @@
-package almostTorrent.server;
+package almostTorrent.tracker;
 
-import almostTorrent.utils.randomUtils;
-
-public class serverMain {
+public class trackerMain {
 
     public static void main(String[] args) {
         System.out.println("Server running");
