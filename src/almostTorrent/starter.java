@@ -2,9 +2,12 @@ package almostTorrent;
 
 import almostTorrent.peer.peerMain;
 import almostTorrent.tracker.trackerMain;
-import almostTorrent.utils.randomUtils;
 
-import static almostTorrent.utils.randomUtils.*;
+import almostTorrent.utils.ioUtils;
+import static almostTorrent.utils.ioUtils.*;
+
+import almostTorrent.utils.docUtils;
+import static almostTorrent.utils.docUtils.*;
 
 public class starter {
 
@@ -18,7 +21,7 @@ public class starter {
 
     private static void initializeStarter(){
         // Start all
-        randomUtils.initializeHelpers();
+        ioUtils.initializeHelpers();
 
         ep("\n=== almostTorrent CLI launcher ===");
 
@@ -34,18 +37,18 @@ public class starter {
                     startCliLoop();
                     break;
                 default:
-                    randomUtils.printHelp("jar");
+                    docUtils.printHelp("jar");
             }
         }
 
         // We only reach this if bad options were given
-        randomUtils.printHelp("jar");
+        docUtils.printHelp("jar");
 
     }
 
     private static void startCliLoop() {
         ep("Entering almostTorrent master shell");
-        randomUtils.printHelp("masterShell");
+        docUtils.printHelp("masterShell");
 
         while (true) {
             System.out.print("\n % ");
@@ -60,10 +63,10 @@ public class starter {
                 case "exit":
                     System.exit(0);
                 case "help":
-                    randomUtils.printHelp("masterShell");
+                    docUtils.printHelp("masterShell");
                     break;
                 case "?":
-                    randomUtils.printHelp("masterShell");
+                    docUtils.printHelp("masterShell");
                     break;
                 default:
                     printHelp("masterShell");
