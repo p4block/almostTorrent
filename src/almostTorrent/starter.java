@@ -50,7 +50,7 @@ public class starter {
         docUtils.printHelp("masterShell");
 
         while (true) {
-            System.out.print("\n % ");
+            System.out.print("\n% ");
 
             switch (mKbScanner.nextLine().toLowerCase()) {
                 case "start peer":
@@ -58,6 +58,12 @@ public class starter {
                     break;
                 case "start tracker":
                     startTracker();
+                    break;
+                case "shell peer":
+                    shellPeer();
+                    break;
+                case "shell tracker":
+                    shellTracker();
                     break;
                 case "exit":
                     exitSoftware(0);
@@ -82,5 +88,13 @@ public class starter {
 
     private static void startTracker(){
         trackerMain.main(mArgs);
+    }
+
+    private static void shellPeer(){
+        peerMain.shell();
+    }
+
+    private static void shellTracker(){
+        trackerMain.shell();
     }
 }
