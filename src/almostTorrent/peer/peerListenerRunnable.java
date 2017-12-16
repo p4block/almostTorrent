@@ -1,14 +1,12 @@
 package almostTorrent.peer;
 
 import almostTorrent.communication.messagePacket;
-import almostTorrent.tracker.trackerMain;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.otherUtils.logAdd;
+import static almostTorrent.utils.lifeCycleUtils.logAdd;
 
 public class peerListenerRunnable implements Runnable {
 

@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.Socket;
 
 import almostTorrent.communication.messagePacket;
-import static almostTorrent.utils.ioUtils.*;
-import static almostTorrent.utils.otherUtils.*;
+
+import static almostTorrent.utils.lifeCycleUtils.*;
 
 public class trackerListenerRunnable implements Runnable {
 

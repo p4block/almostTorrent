@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.otherUtils.logAdd;
+import static almostTorrent.utils.lifeCycleUtils.logAdd;
 
 public class peerMain {
 

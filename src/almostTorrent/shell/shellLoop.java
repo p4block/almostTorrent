@@ -1,17 +1,17 @@
 package almostTorrent.shell;
 
 import almostTorrent.peer.peerMain;
-import almostTorrent.tracker.trackerMain;
 import almostTorrent.utils.docUtils;
+import almostTorrent.utils.lifeCycleUtils;
 
 import static almostTorrent.utils.docUtils.printHelp;
 import static almostTorrent.utils.ioUtils.ep;
 import static almostTorrent.utils.ioUtils.mKbScanner;
-import static almostTorrent.utils.otherUtils.*;
+import static almostTorrent.utils.lifeCycleUtils.*;
 
 public class shellLoop {
 
-    static String[] mParams;
+    private static String[] mParams;
 
     public static void startCliLoop() {
         ep("Entering almostTorrent master shell");
@@ -33,10 +33,10 @@ public class shellLoop {
                 case "start":
                     switch (params[1]) {
                         case "peer":
-                            startPeer();
+                            startPeer(params);
                             break;
                         case "tracker":
-                            startTracker();
+                            startTracker(params);
                             break;
                         default:
                             docUtils.printHelp("start");
@@ -83,10 +83,10 @@ public class shellLoop {
 
     }
 
-    // CLI Shell function
+    // Peer CLI
     private static void peerShell() {
         boolean shellActive = true;
-        startPeer();
+        startPeer(mParams);
         while (shellActive) {
             System.out.print("peer% ");
             String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
@@ -110,9 +110,10 @@ public class shellLoop {
         }
     }
 
-    // CLI Shell function
+    // Tracker CLI
     private static void trackerShell() {
         boolean shellActive = true;
+        startTracker(mParams);
         while (shellActive) {
             System.out.print("tracker% ");
 
@@ -136,20 +137,6 @@ public class shellLoop {
         System.out.print("\n");
     }
 
-    private static void startPeer() {
-        peerMain.main(mParams);
-    }
 
-    private static void stopPeer() {
-        peerMain.stop();
-    }
-
-    private static void startTracker() {
-        trackerMain.main(mParams);
-    }
-
-    private static void stopTracker() {
-        trackerMain.stop();
-    }
 
 }

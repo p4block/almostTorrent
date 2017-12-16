@@ -7,8 +7,6 @@ import almostTorrent.tracker.trackerMain;
 import almostTorrent.utils.*;
 
 import static almostTorrent.utils.ioUtils.*;
-import static almostTorrent.utils.otherUtils.*;
-import static almostTorrent.utils.docUtils.*;
 
 public class starter {
 
