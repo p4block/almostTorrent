@@ -5,8 +5,8 @@ import almostTorrent.communication.messagePacket;
 import java.io.*;
 import java.net.Socket;
 
-import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.lifeCycleUtils.logAdd;
+import static almostTorrent.utils.ioUtils.*;
+import static almostTorrent.utils.lifeCycleUtils.*;
 
 public class peerListenerRunnable implements Runnable {
 
