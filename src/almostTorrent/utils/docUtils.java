@@ -24,15 +24,18 @@ public class docUtils {
             case "shell":
                 ep("Invalid syntax's. Use 'shell (peer || tracker)'");
                 break;
-
-//                ep("--> tracker set <IP>:<Port>");
-//                ep("--> tracker get");
-//                ep("--> share file <Path>");
-//                ep("--> share dir <Path>");
-//                ep("--> show peers");
-//                ep("--> mode set <Mode>");
-//                ep("--> mode get");
-//                break;
+            case "peerShell":
+                ep("Available commands:");
+                ep("ping");
+                ep("exit");
+                ep("help");
+                break;
+            case "trackerShell":
+                ep("Available commands:");
+                ep("ping");
+                ep("exit");
+                ep("help");
+                break;
         }
     }
 }

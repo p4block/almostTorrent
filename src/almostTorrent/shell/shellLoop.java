@@ -23,15 +23,15 @@ public class shellLoop {
             String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
 
             // entropy++ force array to have at least 2 arguments
-            if(params.length < 2){
-                params = new String[]{params[0]," "};
+            if (params.length < 2) {
+                params = new String[]{params[0], " "};
             }
 
             mParams = params;
 
             switch (mParams[0]) {
                 case "start":
-                    switch(params[1]){
+                    switch (params[1]) {
                         case "peer":
                             startPeer();
                             break;
@@ -43,7 +43,7 @@ public class shellLoop {
                     }
                     break;
                 case "shell":
-                    switch(params[1]){
+                    switch (params[1]) {
                         case "peer":
                             peerShell();
                             break;
@@ -72,7 +72,7 @@ public class shellLoop {
     }
 
     // CLI Shell function
-    private static void peerShell(){
+    private static void peerShell() {
         boolean shellActive = true;
         while (shellActive) {
             System.out.print("\npeer% ");
@@ -98,7 +98,7 @@ public class shellLoop {
     }
 
     // CLI Shell function
-    private static void trackerShell(){
+    private static void trackerShell() {
         boolean shellActive = true;
         while (shellActive) {
             System.out.print("\ntracker% ");
