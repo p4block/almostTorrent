@@ -10,10 +10,10 @@ public class ioUtils {
     // Add to log objects
     public static void logAdd(String who, String content){
         switch (who) {
-            case "tracker":
+            case "peer":
                 peerMain.mLog.add(content);
                 break;
-            case "peer":
+            case "tracker":
                 trackerMain.mLog.add(content);
                 break;
         }
@@ -21,10 +21,10 @@ public class ioUtils {
 
     public static String logRead(String who){
         switch (who) {
-            case "tracker":
-                return peerMain.mLog.toString();
             case "peer":
-                return trackerMain.mLog.toString();
+                return String.join("\n", peerMain.mLog);
+            case "tracker":
+                return String.join("\n",trackerMain.mLog);
         }
         return null; // Java is bad m'kay?
     }

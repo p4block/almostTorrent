@@ -4,9 +4,8 @@ import almostTorrent.peer.peerMain;
 import almostTorrent.utils.docUtils;
 import almostTorrent.utils.lifeCycleUtils;
 
-import static almostTorrent.utils.docUtils.printHelp;
-import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.ioUtils.mKbScanner;
+import static almostTorrent.utils.docUtils.*;
+import static almostTorrent.utils.ioUtils.*;
 import static almostTorrent.utils.lifeCycleUtils.*;
 
 public class shellLoop {
@@ -66,6 +65,18 @@ public class shellLoop {
                             docUtils.printHelp("shell");
                     }
                     break;
+                case "log":
+                    switch (params[1]) {
+                        case "peer":
+                            ep(logRead("peer"));
+                            break;
+                        case "tracker":
+                            ep(logRead("tracker"));
+                            break;
+                        default:
+                            docUtils.printHelp("log");
+                    }
+                    break;
                 case "exit":
                     exitMainLoop(0);
                     break;
@@ -94,6 +105,9 @@ public class shellLoop {
                 case "ping":
                     peerMain.pingServer(params);
                     break;
+                case "log":
+                    logRead("peer");
+                    break;
                 case "exit":
                     shellActive = false;
                     break;
@@ -118,6 +132,9 @@ public class shellLoop {
             System.out.print("tracker% ");
 
             switch (mKbScanner.nextLine().toLowerCase()) {
+                case "log":
+                    logRead("tracker");
+                    break;
                 case "exit":
                     shellActive = false;
                     break;

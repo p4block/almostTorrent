@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.lifeCycleUtils.logAdd;
+import static almostTorrent.utils.ioUtils.*;
 
 public class peerMain {
 
