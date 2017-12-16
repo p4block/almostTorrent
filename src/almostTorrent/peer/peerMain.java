@@ -68,7 +68,7 @@ public class peerMain {
 
     }
 
-    private static void pingServer(String[] params) {
+    public static void pingServer(String[] params) {
         String pingMessage = "Ping!";
         if (params.length > 1) {
             pingMessage = params[1];
@@ -77,29 +77,4 @@ public class peerMain {
         sendMessage(pingMessage);
     }
 
-    // CLI Shell function
-    public static void shell(){
-        boolean shellActive = true;
-        while (shellActive) {
-            System.out.print("\npeer% ");
-            String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
-            switch (params[0]) {
-                case "ping":
-                    pingServer(params);
-                    break;
-                case "exit":
-                    shellActive = false;
-                    break;
-                case "help":
-                    docUtils.printHelp("peerShell");
-                    break;
-                case "?":
-                    docUtils.printHelp("peerShell");
-                    break;
-                default:
-                    printHelp("peerShell");
-            }
-
-        }
-    }
 }

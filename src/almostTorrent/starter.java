@@ -1,6 +1,7 @@
 package almostTorrent;
 
 import almostTorrent.peer.peerMain;
+import almostTorrent.shell.shellLoop;
 import almostTorrent.tracker.trackerMain;
 
 import almostTorrent.utils.*;
@@ -25,83 +26,23 @@ public class starter {
 
         ep("\n=== almostTorrent CLI launcher ===");
 
-        for (String i : mArgs) {
-            switch (i) {
+        if (mArgs.length > 0) {
+            switch (mArgs[0]) {
                 case "-p":
-                    startPeer();
+                    peerMain.main(mArgs);
                     break;
                 case "-t":
-                    startTracker();
+                    trackerMain.main(mArgs);
                     break;
                 case "-i":
-                    startCliLoop();
+                    shellLoop.startCliLoop();
                     break;
                 default:
                     docUtils.printHelp("jar");
             }
+        } else {
+            docUtils.printHelp("jar");
         }
 
-        // We only reach this if bad options were given
-        docUtils.printHelp("jar");
-
-    }
-
-    private static void startCliLoop() {
-        ep("Entering almostTorrent master shell");
-        docUtils.printHelp("masterShell");
-
-        while (true) {
-            System.out.print("\n% ");
-
-            switch (mKbScanner.nextLine().toLowerCase()) {
-                case "start":
-                    docUtils.printHelp("start");
-                    break;
-                case "start peer":
-                    startPeer();
-                    break;
-                case "start tracker":
-                    startTracker();
-                    break;
-                case "shell":
-                    docUtils.printHelp("shell");
-                    break;
-                case "shell peer":
-                    shellPeer();
-                    break;
-                case "shell tracker":
-                    shellTracker();
-                    break;
-                case "exit":
-                    exitSoftware(0);
-                    break;
-                case "help":
-                    docUtils.printHelp("masterShell");
-                    break;
-                case "?":
-                    docUtils.printHelp("masterShell");
-                    break;
-                default:
-                    printHelp("masterShell");
-            }
-
-        }
-
-    }
-
-    private static void startPeer() {
-        peerMain.main(mArgs);
-    }
-
-    private static void startTracker() {
-        trackerMain.main(mArgs);
-    }
-
-    private static void shellPeer() {
-        peerMain.shell();
-    }
-
-    private static void shellTracker() {
-        trackerMain.shell();
     }
 }
