@@ -70,17 +70,15 @@ public class trackerMain {
         mSocketList.remove(socket);
     }
 
+    @SuppressWarnings("Duplicates")
     public static void stop() {
-        if (trackerThreadRunning) {
-            try {
-                trackerThreadRunning = false;
-                mServerSocket.close();
-                mExecutorService.shutdownNow();
-            } catch (IOException e) {
-                // Socket closed successfully, false exception. Do nothing.
-            }
+        if (trackerThreadRunning) try {
+            trackerThreadRunning = false;
+            mServerSocket.close();
+            mExecutorService.shutdownNow();
+        } catch (IOException e) {
+            // Socket closed successfully, false exception. Do nothing.
         }
     }
-
 
 }

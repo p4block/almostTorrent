@@ -71,15 +71,14 @@ public class peerMain {
         mSocketList.remove(socket);
     }
 
+    @SuppressWarnings("Duplicates")
     public static void stop() {
-        if (peerThreadRunning) {
-            try {
-                peerThreadRunning = false;
-                mServerSocket.close();
-                mExecutorService.shutdownNow();
-            } catch (IOException e) {
-                // Socket closed successfully, false exception. Do nothing.
-            }
+        if (peerThreadRunning) try {
+            peerThreadRunning = false;
+            mServerSocket.close();
+            mExecutorService.shutdownNow();
+        } catch (IOException e) {
+            // Socket closed successfully, false exception. Do nothing.
         }
     }
 

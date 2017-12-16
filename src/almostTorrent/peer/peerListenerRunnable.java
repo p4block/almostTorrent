@@ -53,7 +53,7 @@ public class peerListenerRunnable implements Runnable {
             } finally {
                 mObjectInputStream.close();
                 //mObjectOutputStream.close();
-                trackerMain.cleanSocket(mSocket,id);
+                peerMain.cleanSocket(mSocket,id);
                 mSocket.close();
             }
         } catch (IOException e) {
