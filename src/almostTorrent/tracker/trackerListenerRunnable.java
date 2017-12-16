@@ -5,8 +5,9 @@ import java.net.Socket;
 
 import almostTorrent.communication.messagePacket;
 import static almostTorrent.utils.ioUtils.*;
+import static almostTorrent.utils.otherUtils.*;
 
-public class trackerThread implements Runnable {
+public class trackerListenerRunnable implements Runnable {
 
     private Socket mSocket = null;
     private long id = 0;
@@ -27,7 +28,7 @@ public class trackerThread implements Runnable {
         this.id = id;
     }
 
-    trackerThread(Socket socket) {
+    trackerListenerRunnable(Socket socket) {
         this.mSocket = socket;
         this.id = System.currentTimeMillis();
 
@@ -35,19 +36,20 @@ public class trackerThread implements Runnable {
 
     public void run() {
         try {
-            ep("Tracker thread " + id + ": handling connection on port " + String.valueOf(mSocket.getPort()));
+            logAdd("tracker","Tracker thread " + id + ": handling connection on port " + String.valueOf(mSocket.getPort()));
 
             ObjectInputStream mObjectInputStream = new ObjectInputStream(mSocket.getInputStream());
            // ObjectOutputStream mObjectOutputStream = null;
 
             try {
-                ep("Tracker receiving incoming connection");
+                logAdd("tracker","Tracker receiving incoming connection");
                 messagePacket mReceivedPacket = (messagePacket) mObjectInputStream.readObject();
-                ep(mReceivedPacket.messageContent);
+                logAdd("tracker", mReceivedPacket.messageContent);
                 ObjectOutputStream mObjectOutputStream = new ObjectOutputStream(mSocket.getOutputStream());
                 mObjectOutputStream.writeObject(new messagePacket(mReceivedPacket.messageContent));
 
             } catch (IOException | ClassNotFoundException e) {
+
                 e.printStackTrace();
             } finally {
                 mObjectInputStream.close();

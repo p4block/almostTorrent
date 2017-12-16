@@ -7,7 +7,7 @@ import almostTorrent.utils.docUtils;
 import static almostTorrent.utils.docUtils.printHelp;
 import static almostTorrent.utils.ioUtils.ep;
 import static almostTorrent.utils.ioUtils.mKbScanner;
-import static almostTorrent.utils.otherUtils.exitSoftware;
+import static almostTorrent.utils.otherUtils.*;
 
 public class shellLoop {
 
@@ -18,7 +18,7 @@ public class shellLoop {
         docUtils.printHelp("masterShell");
 
         while (true) {
-            System.out.print("\n% ");
+            System.out.print("% ");
 
             String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
 
@@ -42,6 +42,18 @@ public class shellLoop {
                             docUtils.printHelp("start");
                     }
                     break;
+                case "stop":
+                    switch(params[1]){
+                        case "peer":
+                            stopPeer();
+                            break;
+                        case "tracker":
+                            stopTracker();
+                            break;
+                        default:
+                            docUtils.printHelp("stop");
+                    }
+                    break;
                 case "shell":
                     switch(params[1]){
                         case "peer":
@@ -55,7 +67,7 @@ public class shellLoop {
                     }
                     break;
                 case "exit":
-                    exitSoftware(0);
+                    exitMainLoop(0);
                     break;
                 case "help":
                     docUtils.printHelp("masterShell");
@@ -74,8 +86,9 @@ public class shellLoop {
     // CLI Shell function
     private static void peerShell(){
         boolean shellActive = true;
+        startPeer();
         while (shellActive) {
-            System.out.print("\npeer% ");
+            System.out.print("peer% ");
             String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
             switch (params[0]) {
                 case "ping":
@@ -101,7 +114,7 @@ public class shellLoop {
     private static void trackerShell(){
         boolean shellActive = true;
         while (shellActive) {
-            System.out.print("\ntracker% ");
+            System.out.print("tracker% ");
 
             switch (mKbScanner.nextLine().toLowerCase()) {
                 case "exit":
@@ -118,14 +131,25 @@ public class shellLoop {
             }
 
         }
+
+        // Make sure that command output is not sent to current line
+        System.out.print("\n");
     }
 
     private static void startPeer() {
         peerMain.main(mParams);
     }
 
+    private static void stopPeer() {
+        peerMain.stop();
+    }
+
     private static void startTracker() {
         trackerMain.main(mParams);
+    }
+
+    private static void stopTracker() {
+        trackerMain.stop();
     }
 
 }

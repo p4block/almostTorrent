@@ -1,10 +1,8 @@
 package almostTorrent.peer;
 
 import almostTorrent.communication.communicationThread;
-import almostTorrent.utils.docUtils;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -12,17 +10,24 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static almostTorrent.utils.docUtils.printHelp;
 import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.ioUtils.mKbScanner;
+import static almostTorrent.utils.otherUtils.logAdd;
 
 public class peerMain {
 
+    // Thread manager
+    private static ExecutorService mExecutorService;
+
+    // Statelessless
     private static boolean peerThreadRunning = false;
 
+    // List of active open sockets
     private static List<Socket> mSocketList = new ArrayList<>();
 
-    private static ExecutorService mExecutorService;
+    // Event log
+    public static List<String> mLog = new ArrayList<>();
+
+    //// Basic Functions
 
     public static void main(String[] args) {
         if (!peerThreadRunning) {
@@ -46,8 +51,8 @@ public class peerMain {
             while (peerThreadRunning) {
                 Socket socket = mServerSocket.accept();
                 mSocketList.add(socket);
-                peerThread thread = new peerThread(socket);
-                mExecutorService.execute(thread);
+                peerListenerRunnable mPeerListenerRunnable = new peerListenerRunnable(socket);
+                mExecutorService.execute(mPeerListenerRunnable);
             }
 
         } catch (IOException e) {
@@ -56,16 +61,21 @@ public class peerMain {
         }
     };
 
-    // Overridely send message to tracker
-    public static void sendMessage(String message){
-        communicationThread mCommunicationThread = new communicationThread("Hello GUYS!");
-        mExecutorService.execute(mCommunicationThread);
+    public static void cleanSocket(Socket socket, long id){
+        logAdd("peer","Thread " + id + ": ended connection on port " + socket.getPort() );
+        mSocketList.remove(socket);
     }
 
-    public static void cleanSocket(Socket socket){
-        System.out.println("Socket closed");
-        mSocketList.remove(socket);
+    public static void stop(){
+        peerThreadRunning = false;
+        mExecutorService.shutdownNow();
+        mExecutorService = null;
+    }
 
+    // Overridely send message to tracker
+    public static void sendMessage(String message){
+        communicationThread mCommunicationThread = new communicationThread(message);
+        mExecutorService.execute(mCommunicationThread);
     }
 
     public static void pingServer(String[] params) {

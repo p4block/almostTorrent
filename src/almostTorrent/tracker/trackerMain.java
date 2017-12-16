@@ -1,7 +1,5 @@
 package almostTorrent.tracker;
 
-import almostTorrent.utils.docUtils;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -11,42 +9,54 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static almostTorrent.utils.docUtils.printHelp;
-import static almostTorrent.utils.ioUtils.ep;
-import static almostTorrent.utils.ioUtils.mKbScanner;
+import static almostTorrent.utils.ioUtils.*;
+import static almostTorrent.utils.otherUtils.*;
 
 public class trackerMain {
 
+    // Thread manager
+    private static ExecutorService mExecutorService;
+
+    // Statelessless
     private static boolean trackerThreadRunning = false;
 
-    static String lastMessage = "";
+    // List of active open sockets
+    private static ServerSocket mServerSocket;
     private static List<Socket> mSocketList = new ArrayList<>();
+
+    // Event log
+    public static List<String> mLog = new ArrayList<>();
+
+    //// Basic Functions
 
     public static void main(String[] args) {
         if (!trackerThreadRunning) {
-            ep("Starting tracker");
-            trackerThreadRunning = true;
+            ep("Starting tracker daemon...");
 
-            Thread peerThreadManagerThread = new Thread(trackerThreadManager);
-            peerThreadManagerThread.start();
+            // Initialize thread manager
+            mExecutorService = Executors.newCachedThreadPool();
 
+            // Start server socket listener
+            mExecutorService.execute(trackerThreadManagerRunnable);
         } else {
             ep("Tracker already running");
         }
     }
 
     // Thread that blocks the server port and spawns socket connections for incoming clients
-    private static Runnable trackerThreadManager = () -> {
-        ExecutorService mExecutorService = Executors.newCachedThreadPool();
-
+    private static Runnable trackerThreadManagerRunnable = () -> {
         try {
-            ServerSocket mServerSocket = new ServerSocket(50000);
+            mServerSocket = new ServerSocket(50000);
+            trackerThreadRunning = true;
 
-            while (trackerThreadRunning) {
-                Socket socket = mServerSocket.accept();
-                mSocketList.add(socket);
-                trackerThread thread = new trackerThread(socket);
-                mExecutorService.execute(thread);
+            try {
+                while (trackerThreadRunning) {
+                    Socket socket = mServerSocket.accept();
+                    mSocketList.add(socket);
+                    mExecutorService.execute(new trackerListenerRunnable(socket));
+                }
+            } catch (IOException e) {
+                ep("Stopped tracker daemon");
             }
 
         } catch (IOException e) {
@@ -55,20 +65,22 @@ public class trackerMain {
         }
     };
 
-    public static void broadcast(){
-        for(Socket socket : mSocketList){
-            try {
-                new PrintWriter(socket.getOutputStream(), true).println(lastMessage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public static void cleanSocket(Socket socket, long id){
+        logAdd("tracker","Thread " + id + ": ended connection on port " + socket.getPort() );
+        mSocketList.remove(socket);
+    }
 
+    public static void stop() {
+        if (trackerThreadRunning) {
+            try {
+                trackerThreadRunning = false;
+                mServerSocket.close();
+                mExecutorService.shutdownNow();
+            } catch (IOException e) {
+                // Socket closed successfully, false exception. Do nothing.
+            }
         }
     }
 
-    public static void cleanSocket(Socket socket, long id){
-        ep("Thread " + id + ": ended connection on port " + socket.getPort() );
-        mSocketList.remove(socket);
-    }
 
 }

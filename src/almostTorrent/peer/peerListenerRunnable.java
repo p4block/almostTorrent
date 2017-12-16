@@ -8,8 +8,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import static almostTorrent.utils.ioUtils.ep;
+import static almostTorrent.utils.otherUtils.logAdd;
 
-public class peerThread implements Runnable {
+public class peerListenerRunnable implements Runnable {
 
     private Socket mSocket = null;
     private long id = 0;
@@ -30,7 +31,7 @@ public class peerThread implements Runnable {
         this.id = id;
     }
 
-    peerThread(Socket socket) {
+    peerListenerRunnable(Socket socket) {
         this.mSocket = socket;
         this.id = System.currentTimeMillis();
 
@@ -38,15 +39,15 @@ public class peerThread implements Runnable {
 
     public void run() {
         try {
-            ep("Peer thread " + id + ": handling connection on port " + String.valueOf(mSocket.getPort()));
+            logAdd("peer","Peer thread " + id + ": handling connection on port " + String.valueOf(mSocket.getPort()));
 
             //ObjectOutputStream mObjectOutputStream = new ObjectOutputStream(mSocket.getOutputStream());
             ObjectInputStream mObjectInputStream = new ObjectInputStream(mSocket.getInputStream());
 
             try {
-                ep("Receiving object");
+                logAdd("peer","Receiving object");
                 messagePacket mReceivedPacket = (messagePacket) mObjectInputStream.readObject();
-                ep(mReceivedPacket.toString());
+                //System.out.print(mReceivedPacket.toString());
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
