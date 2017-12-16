@@ -20,7 +20,7 @@ public class trackerMain {
     // Statelessless
     private static boolean trackerThreadRunning = false;
 
-    // List of active open sockets
+    // Socket objects
     private static ServerSocket mServerSocket;
     private static List<Socket> mSocketList = new ArrayList<>();
 

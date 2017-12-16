@@ -21,7 +21,8 @@ public class peerMain {
     // Statelessless
     private static boolean peerThreadRunning = false;
 
-    // List of active open sockets
+    // Socket objects
+    private static ServerSocket mServerSocket;
     private static List<Socket> mSocketList = new ArrayList<>();
 
     // Event log
@@ -43,16 +44,20 @@ public class peerMain {
         }
     }
 
+    // Thread that blocks the server port and spawns socket connections for incoming clients
     private static Runnable peerThreadManagerRunnable = () -> {
         try {
-            ServerSocket mServerSocket = new ServerSocket(50001);
+            mServerSocket = new ServerSocket(50001);
             peerThreadRunning = true;
 
             while (peerThreadRunning) {
-                Socket socket = mServerSocket.accept();
-                mSocketList.add(socket);
-                peerListenerRunnable mPeerListenerRunnable = new peerListenerRunnable(socket);
-                mExecutorService.execute(mPeerListenerRunnable);
+                try {
+                    Socket socket = mServerSocket.accept();
+                    mSocketList.add(socket);
+                    mExecutorService.execute(new peerListenerRunnable(socket));
+                } catch (IOException e) {
+                    ep("Stopped client daemon");
+                }
             }
 
         } catch (IOException e) {
@@ -66,10 +71,16 @@ public class peerMain {
         mSocketList.remove(socket);
     }
 
-    public static void stop(){
-        peerThreadRunning = false;
-        mExecutorService.shutdownNow();
-        mExecutorService = null;
+    public static void stop() {
+        if (peerThreadRunning) {
+            try {
+                peerThreadRunning = false;
+                mServerSocket.close();
+                mExecutorService.shutdownNow();
+            } catch (IOException e) {
+                // Socket closed successfully, false exception. Do nothing.
+            }
+        }
     }
 
     // Overridely send message to tracker
