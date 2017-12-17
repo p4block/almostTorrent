@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/almostTorrent.iml" filepath="$PROJECT_DIR$/almostTorrent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/beeTorrent.iml" filepath="$PROJECT_DIR$/beeTorrent.iml" />
     </modules>
   </component>
 </project>

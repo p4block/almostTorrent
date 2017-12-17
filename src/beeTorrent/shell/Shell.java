@@ -1,19 +1,20 @@
-package almostTorrent.shell;
+package beeTorrent.shell;
 
-import almostTorrent.peer.peerMain;
-import almostTorrent.utils.docUtils;
-import almostTorrent.utils.lifeCycleUtils;
+import beeTorrent.roles.Peer;
+import beeTorrent.roles.Tracker;
+import beeTorrent.utils.docUtils;
+import beeTorrent.utils.lifeCycleUtils;
 
-import static almostTorrent.utils.docUtils.*;
-import static almostTorrent.utils.ioUtils.*;
-import static almostTorrent.utils.lifeCycleUtils.*;
+import static beeTorrent.utils.docUtils.*;
+import static beeTorrent.utils.ioUtils.*;
+import static beeTorrent.utils.lifeCycleUtils.*;
 
-public class shellLoop {
+public class Shell {
 
     private static String[] mParams;
 
-    public static void startCliLoop() {
-        ep("Entering almostTorrent master shell");
+    public static void mainLoop() {
+        ep("Entering beeTorrent master shell");
         docUtils.printHelp("masterShell");
 
         while (true) {
@@ -21,9 +22,9 @@ public class shellLoop {
 
             String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
 
-            // entropy++ force array to have at least 2 arguments
+            // entropy++ force array to have at least 3 arguments
             if (params.length < 2) {
-                params = new String[]{params[0], " "};
+                params = new String[]{params[0], " ",""};
             }
 
             mParams = params;
@@ -32,10 +33,10 @@ public class shellLoop {
                 case "start":
                     switch (params[1]) {
                         case "peer":
-                            startPeer(params);
+                            startPeer();
                             break;
                         case "tracker":
-                            startTracker(params);
+                            startTracker();
                             break;
                         default:
                             docUtils.printHelp("start");
@@ -44,10 +45,10 @@ public class shellLoop {
                 case "stop":
                     switch(params[1]){
                         case "peer":
-                            stopPeer();
+                            stopPeer(0);
                             break;
                         case "tracker":
-                            stopTracker();
+                            stopTracker(0);
                             break;
                         default:
                             docUtils.printHelp("stop");
@@ -56,10 +57,10 @@ public class shellLoop {
                 case "shell":
                     switch (params[1]) {
                         case "peer":
-                            peerShell();
+                            peerShell(0);
                             break;
                         case "tracker":
-                            trackerShell();
+                            trackerShell(0);
                             break;
                         default:
                             docUtils.printHelp("shell");
@@ -68,10 +69,10 @@ public class shellLoop {
                 case "log":
                     switch (params[1]) {
                         case "peer":
-                            ep(logRead("peer"));
+                            ep(logRead(0));
                             break;
                         case "tracker":
-                            ep(logRead("tracker"));
+                            ep(logRead(0));
                             break;
                         default:
                             docUtils.printHelp("log");
@@ -95,18 +96,20 @@ public class shellLoop {
     }
 
     // Peer CLI
-    private static void peerShell() {
+    private static void peerShell(int index) {
         boolean shellActive = true;
-        startPeer(mParams);
+
+        Peer peer = lifeCycleUtils.mPeerList.get(index);
+
         while (shellActive) {
             System.out.print("peer% ");
             String[] params = mKbScanner.nextLine().toLowerCase().split(" ");
             switch (params[0]) {
                 case "ping":
-                    peerMain.pingServer(params);
+                    peer.pingServer(params);
                     break;
                 case "log":
-                    logRead("peer");
+                    logRead(peer);
                     break;
                 case "exit":
                     shellActive = false;
@@ -125,15 +128,17 @@ public class shellLoop {
     }
 
     // Tracker CLI
-    private static void trackerShell() {
+    private static void trackerShell(int index) {
         boolean shellActive = true;
-        startTracker(mParams);
+
+        Tracker tracker  = lifeCycleUtils.mTrackerList.get(index);
+
         while (shellActive) {
             System.out.print("tracker% ");
 
             switch (mKbScanner.nextLine().toLowerCase()) {
                 case "log":
-                    logRead("tracker");
+                    logRead(tracker);
                     break;
                 case "exit":
                     shellActive = false;

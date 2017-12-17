@@ -1,14 +1,12 @@
-package almostTorrent;
+package beeTorrent;
 
-import almostTorrent.peer.peerMain;
-import almostTorrent.shell.shellLoop;
-import almostTorrent.tracker.trackerMain;
+import beeTorrent.shell.Shell;
+import beeTorrent.utils.*;
 
-import almostTorrent.utils.*;
+import static beeTorrent.utils.ioUtils.*;
+import static beeTorrent.utils.lifeCycleUtils.*;
 
-import static almostTorrent.utils.ioUtils.*;
-
-public class starter {
+public class Starter {
 
     private static String[] mArgs;
 
@@ -22,18 +20,18 @@ public class starter {
         // Start all
         ioUtils.initializeHelpers();
 
-        ep("\n=== almostTorrent CLI launcher ===");
+        ep("\n=== beeTorrent CLI launcher ===");
 
         if (mArgs.length > 0) {
             switch (mArgs[0]) {
                 case "-p":
-                    peerMain.main(mArgs);
+                    startPeer();
                     break;
                 case "-t":
-                    trackerMain.main(mArgs);
+                    startTracker();
                     break;
                 case "-i":
-                    shellLoop.startCliLoop();
+                    Shell.mainLoop();
                     break;
                 default:
                     docUtils.printHelp("jar");

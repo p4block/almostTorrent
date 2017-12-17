@@ -1,4 +1,4 @@
-package almostTorrent.communication;
+package beeTorrent.communication;
 
 import java.io.Serializable;
 

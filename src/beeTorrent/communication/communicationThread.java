@@ -1,14 +1,11 @@
-package almostTorrent.communication;
-
-import almostTorrent.communication.messagePacket;
-import almostTorrent.tracker.trackerMain;
+package beeTorrent.communication;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static almostTorrent.utils.ioUtils.ep;
+import static beeTorrent.utils.ioUtils.ep;
 
 public class communicationThread implements Runnable {
 

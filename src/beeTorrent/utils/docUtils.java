@@ -1,6 +1,6 @@
-package almostTorrent.utils;
+package beeTorrent.utils;
 
-import static almostTorrent.utils.ioUtils.*;
+import static beeTorrent.utils.ioUtils.*;
 
 public class docUtils {
 
@@ -8,7 +8,7 @@ public class docUtils {
     public static void printHelp(String input){
         switch(input){
             case "jar":
-                ep("java -jar almostTorrent.jar -t || -p || -i");
+                ep("java -jar beeTorrent.jar -t || -p || -i");
                 ep("-t tracker mode \n-p peer mode \n-i interactive shell");
                 break;
             case "masterShell":
