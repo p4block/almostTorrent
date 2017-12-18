@@ -46,12 +46,10 @@ public class Starter {
         if (cli.hasOption("interactive")) {
             Shell.mainLoop();
         }
-        if (!cli.hasOption("help") & !cli.hasOption("peer") & !cli.hasOption("tracker") & !cli.hasOption("interactive")) {
-            ep("DEBUG: No se ha cumplido ninguna opcion");
-            //Change to  HelpFormatter
-            //docUtils.printHelp("jar");
-            formatter.printHelp("Invalid argument" + cli.getOptions(), options);
-        }
+        ep("DEBUG: No se ha cumplido ninguna opcion");
+        //Change to  HelpFormatter
+        //docUtils.printHelp("jar");
+        formatter.printHelp("Invalid argument" + cli.getOptions(), options);
 
 
 //        if (mArgs.length > 0) {
