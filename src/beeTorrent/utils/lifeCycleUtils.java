@@ -47,6 +47,7 @@ public class lifeCycleUtils {
 
     public static void stopPeer(int i) {
         Peer peer = mPeerList.get(i);
+        mPeerList.remove(peer);
         peer.stop();
         peer = null;
     }
@@ -60,6 +61,7 @@ public class lifeCycleUtils {
     public static void stopTracker(int i) {
         Tracker tracker = mTrackerList.get(i);
         tracker.stop();
+        mTrackerList.remove(tracker);
         tracker = null;
     }
 
