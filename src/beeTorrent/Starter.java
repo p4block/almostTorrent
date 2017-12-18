@@ -3,7 +3,6 @@ package beeTorrent;
 import beeTorrent.shell.Shell;
 import beeTorrent.utils.*;
 
-import static beeTorrent.utils.ioUtils.*;
 import static beeTorrent.utils.lifeCycleUtils.*;
 
 import org.apache.commons.cli.*;
@@ -23,18 +22,19 @@ public class Starter {
 
     private static void initializeStarter() {
         CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
         CommandLine cli = null;
 
         try {
             cli = parser.parse(options, mArgs);
         } catch (ParseException e) {
-            e.printStackTrace();
+            docUtils.printHelp("welcome");
+            formatter.printHelp("invalid arguments",options);
+            System.exit(0);
+        } finally {
+            ioUtils.initializeHelpers();
+            docUtils.printHelp("welcome");
         }
-
-        HelpFormatter formatter = new HelpFormatter();
-
-        ioUtils.initializeHelpers();
-        ep("\n=== beeTorrent CLI launcher ===\n");
 
         if (cli.hasOption("help")) {
             formatter.printHelp("jar launch", options);
@@ -52,8 +52,7 @@ public class Starter {
             Shell.mainLoop();
         }
 
-        ep("DEBUG: No se ha cumplido ninguna opcion");
-        formatter.printHelp("Invalid argument" + cli.getOptions(), options);
+        formatter.printHelp("no arguments", options);
 
     }
 
