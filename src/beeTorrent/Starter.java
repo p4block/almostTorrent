@@ -24,11 +24,13 @@ public class Starter {
     private static void initializeStarter() {
         CommandLineParser parser = new DefaultParser();
         CommandLine cli = null;
+
         try {
             cli = parser.parse(options, mArgs);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         HelpFormatter formatter = new HelpFormatter();
 
         ioUtils.initializeHelpers();
@@ -37,38 +39,21 @@ public class Starter {
         if (cli.hasOption("help")) {
             formatter.printHelp("jar launch", options);
         }
+
         if (cli.hasOption("peer")) {
             startPeer();
         }
+
         if (cli.hasOption("tracker")) {
             startTracker();
         }
+
         if (cli.hasOption("interactive")) {
             Shell.mainLoop();
         }
+
         ep("DEBUG: No se ha cumplido ninguna opcion");
-        //Change to  HelpFormatter
-        //docUtils.printHelp("jar");
         formatter.printHelp("Invalid argument" + cli.getOptions(), options);
-
-
-//        if (mArgs.length > 0) {
-//            switch (mArgs[0]) {
-//                case "-p":
-//                    startPeer();
-//                    break;
-//                case "-t":
-//                    startTracker();
-//                    break;
-//                case "-i":
-//                    Shell.mainLoop();
-//                    break;
-//                default:
-//                    docUtils.printHelp("jar");
-//            }
-//        } else {
-//            docUtils.printHelp("jar");
-//        }
 
     }
 
