@@ -31,7 +31,7 @@ public class Shell {
 
             switch (mParams[0]) {
                 case "start":
-                    switch (params[1]) {
+                    switch (mParams[1]) {
                         case "peer":
                             startPeer();
                             break;
@@ -43,7 +43,7 @@ public class Shell {
                     }
                     break;
                 case "stop":
-                    switch(params[1]){
+                    switch(mParams[1]){
                         case "peer":
                             stopPeer(0);
                             break;
@@ -55,7 +55,7 @@ public class Shell {
                     }
                     break;
                 case "shell":
-                    switch (params[1]) {
+                    switch (mParams[1]) {
                         case "peer":
                             peerShell(0);
                             break;
@@ -67,7 +67,7 @@ public class Shell {
                     }
                     break;
                 case "log":
-                    switch (params[1]) {
+                    switch (mParams[1]) {
                         case "peer":
                             ep(logRead(0));
                             break;
