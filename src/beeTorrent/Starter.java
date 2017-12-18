@@ -11,6 +11,7 @@ import org.apache.commons.cli.ParseException;
 public class Starter {
 
     private static String[] mArgs;
+    private static int mPort;
     private static Options options;
 
     public static void main(String[] args) {
@@ -41,11 +42,13 @@ public class Starter {
         }
 
         if (cli.hasOption("peer")) {
-            startPeer();
+            mPort = ioUtils.selectPort();
+            startPeer(mPort);
         }
 
         if (cli.hasOption("tracker")) {
-            startTracker();
+            mPort = ioUtils.selectPort();
+            startTracker(mPort);
         }
 
         if (cli.hasOption("interactive")) {

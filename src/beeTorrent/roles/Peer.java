@@ -5,8 +5,8 @@ import beeTorrent.utils.lifeCycleUtils;
 
 public class Peer extends Bee {
 
-    public Peer(){
-        super(lifeCycleUtils.HiveRole.PEER);
+    public Peer(int port){
+        super(lifeCycleUtils.HiveRole.PEER, port);
     }
 
     // Overridely send message to tracker

@@ -28,13 +28,13 @@ public class lifeCycleUtils {
     }
 
     // Starting roles
-    public static void startPeer() {
-        Peer mPeer = new Peer();
+    public static void startPeer(int port) {
+        Peer mPeer = new Peer(port);
         mPeerList.add(mPeer);
     }
 
-    public static void startTracker() {
-        Tracker mTracker = new Tracker();
+    public static void startTracker(int port) {
+        Tracker mTracker = new Tracker(port);
         mTrackerList.add(mTracker);
     }
 

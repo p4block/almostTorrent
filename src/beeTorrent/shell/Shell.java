@@ -3,6 +3,7 @@ package beeTorrent.shell;
 import beeTorrent.roles.Peer;
 import beeTorrent.roles.Tracker;
 import beeTorrent.utils.docUtils;
+import beeTorrent.utils.ioUtils;
 import beeTorrent.utils.lifeCycleUtils;
 
 import static beeTorrent.utils.docUtils.*;
@@ -12,6 +13,7 @@ import static beeTorrent.utils.lifeCycleUtils.*;
 public class Shell {
 
     private static String[] mParams;
+    private static int mPort;
 
     public static void mainLoop() {
         ep("Entering beeTorrent master shell");
@@ -24,7 +26,7 @@ public class Shell {
 
             // entropy++ force array to have at least 3 arguments
             if (params.length < 2) {
-                params = new String[]{params[0], " ",""};
+                params = new String[]{params[0], " ", ""};
             }
 
             mParams = params;
@@ -33,17 +35,19 @@ public class Shell {
                 case "start":
                     switch (params[1]) {
                         case "peer":
-                            startPeer();
+                            mPort = ioUtils.selectPort();
+                            startPeer(mPort);
                             break;
                         case "tracker":
-                            startTracker();
+                            mPort = ioUtils.selectPort();
+                            startTracker(mPort);
                             break;
                         default:
                             docUtils.printHelp("start");
                     }
                     break;
                 case "stop":
-                    switch(params[1]){
+                    switch (params[1]) {
                         case "peer":
                             stopPeer(0);
                             break;
@@ -131,7 +135,7 @@ public class Shell {
     private static void trackerShell(int index) {
         boolean shellActive = true;
 
-        Tracker tracker  = lifeCycleUtils.mTrackerList.get(index);
+        Tracker tracker = lifeCycleUtils.mTrackerList.get(index);
 
         while (shellActive) {
             System.out.print("tracker% ");
@@ -158,7 +162,4 @@ public class Shell {
         // Make sure that command output is not sent to current line
         System.out.print("\n");
     }
-
-
-
 }

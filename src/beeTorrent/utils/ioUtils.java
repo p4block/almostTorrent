@@ -37,4 +37,21 @@ public class ioUtils {
         System.out.println(String.valueOf(i));
     }
 
+    // Select Ports
+    public static int selectPort() {
+        int port;
+        ep("Introduce port to start the bee");
+        System.out.print("Port: [Default = 6969] ");
+        int input = Integer.parseInt(mKbScanner.nextLine());
+        if(input > 0 & input < 65535) {
+            port = input;
+            ep("Setting port value to "+port);
+            return port;
+        } else {
+            port = 6969;
+            ep("Setting port valute to default "+port);
+            return port;
+        }
+    }
+
 }
