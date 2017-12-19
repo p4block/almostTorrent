@@ -76,7 +76,7 @@ public class Bee {
                     mSocketList.add(socket);
                     mExecutorService.execute(new connectionHandlerRunnable(mThis,mRole,socket));
                 } catch (IOException e) {
-                    ep(mRole + "on port" + mPort + " stopping");
+                    ep(mRole + " on port " + mPort + " stopping");
                 }
             }
 

@@ -11,8 +11,6 @@ import org.apache.commons.cli.ParseException;
 
 public class Starter {
 
-    private static int DEFAULT_PORT = 6969;
-
     private static String[] mArgs;
     private static int mPort;
     private static Options options;
@@ -47,11 +45,13 @@ public class Starter {
         }
 
         if (cli.hasOption("peer")) {
-            parsePortAndStart("peer");
+//            parsePortAndStart("peer");
+            startPeer(parsePort("peer"));
         }
 
         if (cli.hasOption("tracker")) {
-            parsePortAndStart("tracker");
+//            parsePortAndStart("tracker");
+            startTracker(parsePort("tracker"));
         }
 
         if (cli.hasOption("interactive")) {
@@ -100,36 +100,23 @@ public class Starter {
         options.addOption(shellOption);
     }
 
-    private static void parsePortAndStart(String option) {
+    private static int parsePort(String option) {
         try {
             if (cli.getParsedOptionValue(option) == null) {
-                mPort = DEFAULT_PORT;
-                if (option == "peer") {
-                    startPeer(mPort);
-                } else {
-                    startTracker(mPort);
-                }
+                return configUtils.DEFAULT_PORT;
 
             } else {
                 mPort = Integer.parseInt((String) cli.getParsedOptionValue(option));
-                if (mPort > 0 & mPort < 65535) {
-                    if (option == "peer") {
-                        startPeer(mPort);
-                    } else {
-                        startTracker(mPort);
-                    }
-                } else {
-                    ep("Invalid port. Setting default port");
-                    mPort = DEFAULT_PORT;
-                    if (option == "peer") {
-                        startPeer(mPort);
-                    } else {
-                        startTracker(mPort);
-                    }
+                if (mPort > configUtils.MIN_PORT & mPort < configUtils.MAX_PORT) {
+                    return mPort;
                 }
+                ep("Invalid port. Setting default port");
+                return configUtils.DEFAULT_PORT;
             }
         } catch (ParseException e) {
             formatter.printHelp("Couldn't parse arguments", options);
         }
+        ep("DEBUG: No deberia haber llegado hasta aqui");
+        return configUtils.DEFAULT_PORT;
     }
 }

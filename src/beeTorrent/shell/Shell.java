@@ -1,10 +1,12 @@
 package beeTorrent.shell;
 
+import beeTorrent.Starter;
 import beeTorrent.roles.Peer;
 import beeTorrent.roles.Tracker;
 import beeTorrent.utils.docUtils;
 import beeTorrent.utils.ioUtils;
 import beeTorrent.utils.lifeCycleUtils;
+import beeTorrent.utils.configUtils;
 
 import static beeTorrent.utils.docUtils.*;
 import static beeTorrent.utils.ioUtils.*;
@@ -26,22 +28,46 @@ public class Shell {
 
             // entropy++ force array to have at least 3 arguments
             if (params.length < 2) {
-                params = new String[]{params[0], " ", ""};
+                params = new String[]{params[0], " "};
             }
 
             mParams = params;
 
-            switch (mParams[0]) {
+            switch (params[0]) {
                 case "start":
                     switch (params[1]) {
                         case "peer":
-                            mPort = ioUtils.selectPort();
-                            startPeer(mPort);
-                            break;
+                            try {
+                                if (!params[2].equals(" ")) {
+                                    int port = Integer.parseInt(params[2]);
+                                    startPeer(configUtils.validatePort(port));
+                                    break;
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
+//                                ep("Start " + params[1] + " on default port: " + configUtils.DEFAULT_PORT);
+                                startPeer(configUtils.DEFAULT_PORT);
+                                break;
+                            }
+                            catch (NumberFormatException e){
+                                ep("Invalid syntax. Use numbers to define the port.");
+                                break;
+                            }
                         case "tracker":
-                            mPort = ioUtils.selectPort();
-                            startTracker(mPort);
-                            break;
+                            try {
+                                if (!params[2].equals(" ")) {
+                                    int port = Integer.parseInt(params[2]);
+                                    startTracker(configUtils.validatePort(port));
+                                    break;
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
+//                                ep("Start " + params[1] + " on default port: " + configUtils.DEFAULT_PORT);
+                                startTracker(configUtils.DEFAULT_PORT);
+                                break;
+                            }
+                            catch (NumberFormatException e){
+                                ep("Invalid syntax. Use numbers to define the port.");
+                                break;
+                            }
                         default:
                             docUtils.printHelp("start");
                     }
@@ -49,11 +75,37 @@ public class Shell {
                 case "stop":
                     switch (params[1]) {
                         case "peer":
-                            stopPeer(0);
-                            break;
+                            try {
+                                if (!params[2].equals(" ")) {
+                                    int port = Integer.parseInt(params[2]);
+                                    stopPeer(configUtils.validatePort(port));
+                                    break;
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
+//                                ep("Stopping " + params[1] + " on default port");
+                                stopPeer(configUtils.DEFAULT_PORT);
+                                break;
+                            }
+                            catch (NumberFormatException e){
+                                ep("Invalid syntax. Use numbers to define the port.");
+                                break;
+                            }
                         case "tracker":
-                            stopTracker(0);
-                            break;
+                            try {
+                                if (!params[2].equals(" ")) {
+                                    int port = Integer.parseInt(params[2]);
+                                    stopTracker(configUtils.validatePort(port));
+                                    break;
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
+//                                ep("Stopping " + params[1] + " on default port");
+                                stopTracker(configUtils.DEFAULT_PORT);
+                                break;
+                            }
+                            catch (NumberFormatException e){
+                                ep("Invalid syntax. Use numbers to define the port.");
+                                break;
+                            }
                         default:
                             docUtils.printHelp("stop");
                     }

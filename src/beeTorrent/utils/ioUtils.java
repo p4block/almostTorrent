@@ -1,5 +1,6 @@
 package beeTorrent.utils;
 
+import beeTorrent.Starter;
 import beeTorrent.roles.Peer;
 import beeTorrent.roles.Tracker;
 import beeTorrent.roles.Bee;
@@ -36,27 +37,6 @@ public class ioUtils {
 
     public static void ep(int i) {
         System.out.println(String.valueOf(i));
-    }
-
-    // Select Ports
-    public static int selectPort() {
-        int mPort = 6969;
-        ep("Introduce port to start the bee");
-        System.out.print("Port: [Default = 6969] ");
-        String input = mKbScanner.nextLine();
-        if (input.isEmpty()) {
-            return mPort;
-        }
-        int port = Integer.parseInt(input);
-        if (port > 0 & port < 65535) {
-            mPort = port;
-            ep("Setting port value to " + port);
-            return mPort;
-        } else {
-            ep("Setting port value to default " + port);
-            return mPort;
-        }
-
     }
 
 }

@@ -13,7 +13,7 @@ public class docUtils {
                 break;
             case "masterShell":
                 ep("Available commands:");
-                ep("(start || stop) (peer || tracker)");
+                ep("(start || stop) (peer || tracker) <port>");
                 ep("shell (peer || tracker)");
                 ep("exit");
                 ep("help");
