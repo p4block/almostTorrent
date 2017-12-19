@@ -3,6 +3,7 @@ package beeTorrent;
 import beeTorrent.shell.Shell;
 import beeTorrent.utils.*;
 
+import static beeTorrent.utils.ioUtils.ep;
 import static beeTorrent.utils.lifeCycleUtils.*;
 
 import org.apache.commons.cli.*;
@@ -10,9 +11,13 @@ import org.apache.commons.cli.ParseException;
 
 public class Starter {
 
+    private static int DEFAULT_PORT = 6969;
+
     private static String[] mArgs;
     private static int mPort;
     private static Options options;
+    private static CommandLine cli;
+    private static HelpFormatter formatter;
 
     public static void main(String[] args) {
         mArgs = args;
@@ -23,14 +28,14 @@ public class Starter {
 
     private static void initializeStarter() {
         CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
-        CommandLine cli = null;
+        formatter = new HelpFormatter();
+        cli = null;
 
         try {
             cli = parser.parse(options, mArgs);
         } catch (ParseException e) {
             docUtils.printHelp("welcome");
-            formatter.printHelp("invalid arguments",options);
+            formatter.printHelp("invalid arguments", options);
             System.exit(0);
         } finally {
             ioUtils.initializeHelpers();
@@ -42,20 +47,18 @@ public class Starter {
         }
 
         if (cli.hasOption("peer")) {
-            mPort = ioUtils.selectPort();
-            startPeer(mPort);
+            parsePortAndStart("peer");
         }
 
         if (cli.hasOption("tracker")) {
-            mPort = ioUtils.selectPort();
-            startTracker(mPort);
+            parsePortAndStart("tracker");
         }
 
         if (cli.hasOption("interactive")) {
             Shell.mainLoop();
         }
 
-        formatter.printHelp("no arguments", options);
+        //formatter.printHelp("no arguments", options);
 
     }
 
@@ -68,14 +71,20 @@ public class Starter {
 
         Option peerOption = Option.builder("p")
                 .longOpt("peer")
+                .numberOfArgs(1)
+                .argName("port")
+                .optionalArg(true)
                 .required(false)
-                .desc("Start tracker on default port")
+                .desc("Start tracker on selected port")
                 .build();
 
         Option trackerOption = Option.builder("t")
                 .longOpt("tracker")
+                .numberOfArgs(1)
+                .argName("port")
+                .optionalArg(true)
                 .required(false)
-                .desc("Start tracker on default port")
+                .desc("Start tracker on selected port")
                 .build();
 
         Option shellOption = Option.builder("i")
@@ -89,5 +98,38 @@ public class Starter {
         options.addOption(peerOption);
         options.addOption(trackerOption);
         options.addOption(shellOption);
+    }
+
+    private static void parsePortAndStart(String option) {
+        try {
+            if (cli.getParsedOptionValue(option) == null) {
+                mPort = DEFAULT_PORT;
+                if (option == "peer") {
+                    startPeer(mPort);
+                } else {
+                    startTracker(mPort);
+                }
+
+            } else {
+                mPort = Integer.parseInt((String) cli.getParsedOptionValue(option));
+                if (mPort > 0 & mPort < 65535) {
+                    if (option == "peer") {
+                        startPeer(mPort);
+                    } else {
+                        startTracker(mPort);
+                    }
+                } else {
+                    ep("Invalid port. Setting default port");
+                    mPort = DEFAULT_PORT;
+                    if (option == "peer") {
+                        startPeer(mPort);
+                    } else {
+                        startTracker(mPort);
+                    }
+                }
+            }
+        } catch (ParseException e) {
+            formatter.printHelp("Couldn't parse arguments", options);
+        }
     }
 }
