@@ -37,6 +37,9 @@ public class docUtils {
             case "stop":
                 ep("Missing what to stop");
                 break;
+            case "welcome":
+                ep("\n=== beeTorrent CLI launcher ===\n");
+                break;
         }
     }
 }
